@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { Send } from 'lucide-react'
 import { db } from '../db'
-import { MODELLI, MODELLO_GEMINI, leggiChiave, salvaChiave, riassuntoDati, sistema, chiedi } from '../ai'
+import { MODELLI, MODELLO_GEMINI, salvaImpostazione, riassuntoDati, sistema, chiedi } from '../ai'
 import { useOggi, usePref } from '../lib'
 
 const DOMANDE = ['Dove posso tagliare le spese?', 'Come posso risparmiare di più ogni mese?', 'Ci sono trend preoccupanti?', 'Il mio budget è realistico?']
@@ -37,8 +37,17 @@ export default function ConsigliAI() {
   const obiettivi = useLiveQuery(() => db.obiettivi.toArray(), []) ?? []
   const ricorrenze = useLiveQuery(() => db.ricorrenze.toArray(), []) ?? []
   const [provider, setProvider] = usePref('aiProvider', 'gemini')
-  const [chiavi, setChiavi] = useState({ gemini: leggiChiave('gemini'), claude: leggiChiave('claude') })
-  const [modelli, setModelli] = useState({ gemini: localStorage.getItem('modelloGemini') || MODELLO_GEMINI, claude: localStorage.getItem('modelloClaude') || MODELLI[0][0] })
+  const imp = useLiveQuery(() => db.impostazioni.toArray(), [])
+  const ip = (c, d = '') => imp?.find((x) => x.chiave === c)?.valore ?? d
+  const chiavi = { gemini: ip('chiaveGemini'), claude: ip('chiaveClaude') }
+  const modelli = { gemini: ip('modelloGemini', MODELLO_GEMINI), claude: ip('modelloClaude', MODELLI[0][0]) }
+  useEffect(() => { // migrazione: chiavi salvate in passato solo su questo dispositivo
+    if (!imp) return
+    for (const k of ['chiaveGemini', 'chiaveClaude', 'modelloGemini', 'modelloClaude']) {
+      const v = localStorage.getItem(k)
+      if (v) { if (!ip(k)) salvaImpostazione(k, v); localStorage.removeItem(k) }
+    }
+  }, [imp])
   const [bozza, setBozza] = useState('')
   const [conNomi, setConNomi] = usePref('aiNomi', false)
   const [msgs, setMsgs] = useState([])
@@ -51,7 +60,7 @@ export default function ConsigliAI() {
   const chiave = chiavi[provider], modello = modelli[provider]
   const dati = riassuntoDati({ mov, cat, fonti, budget, obiettivi, ricorrenze, oggi, conNomi })
   const cambiaServizio = (p) => { setProvider(p); setMsgs([]); setErrore(''); setBozza('') }
-  const cambiaModello = (m) => { setModelli({ ...modelli, [provider]: m }); localStorage.setItem(provider === 'gemini' ? 'modelloGemini' : 'modelloClaude', m) }
+  const cambiaModello = (m) => db.impostazioni.put({ chiave: provider === 'gemini' ? 'modelloGemini' : 'modelloClaude', valore: m })
 
   async function invia(t) {
     t = t.trim()
@@ -65,12 +74,13 @@ export default function ConsigliAI() {
     setCarica(false)
   }
 
+  if (imp === undefined) return null
   if (!chiave) {
     const salva = () => {
       const k = bozza.trim()
       if (provider === 'claude' && !k.startsWith('sk-ant-')) return setErrore('La chiave Claude dovrebbe iniziare con "sk-ant-".')
       if (k.length < 20) return setErrore('Incolla la chiave completa.')
-      salvaChiave(provider, k); setChiavi({ ...chiavi, [provider]: k }); setBozza(''); setErrore('')
+      salvaImpostazione(provider === 'gemini' ? 'chiaveGemini' : 'chiaveClaude', k); setBozza(''); setErrore('')
     }
     return (
       <>
@@ -98,7 +108,7 @@ export default function ConsigliAI() {
           </label>
           {errore && <p className="errore" role="alert">{errore}</p>}
           <button className="btn primario" onClick={salva}>Salva la chiave</button>
-          <p className="piccolo">La chiave resta solo su questo dispositivo (nel browser): non entra nei backup.</p>
+          <p className="piccolo">La chiave viene salvata con i tuoi dati: con la sincronizzazione attiva la ritrovi su tutti i dispositivi (solo nel tuo Supabase). Non finisce nei file di backup.</p>
         </section>
       </>
     )
@@ -132,7 +142,7 @@ export default function ConsigliAI() {
               </label>
             )}
             <p className="piccolo">Chiave salvata: …{chiave.slice(-4)}</p>
-            <button className="link pericolo" onClick={() => { salvaChiave(provider, ''); setChiavi({ ...chiavi, [provider]: '' }); setMsgs([]) }}>Rimuovi la chiave da questo dispositivo</button>
+            <button className="link pericolo" onClick={() => { salvaImpostazione(provider === 'gemini' ? 'chiaveGemini' : 'chiaveClaude', ''); setMsgs([]) }}>Rimuovi la chiave</button>
           </div>
         </details>
       </section>

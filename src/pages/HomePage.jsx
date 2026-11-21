@@ -57,6 +57,8 @@ export default function HomePage({ onModifica, vai, apri }) {
   const [ultimoBackup] = usePref('ultimoBackup', null)
   const giorniDaBackup = ultimoBackup ? giorniTra(ultimoBackup, oggi) : null
   const serveBackup = mov.length >= 10 && (giorniDaBackup === null || giorniDaBackup > 30)
+  const creditiAperti = mov.filter((m) => m.credito && !m.saldato)
+  const totCrediti = creditiAperti.reduce((t, m) => t + m.importo, 0)
   const righeBudget = statoBudget({ budget, cat, mov, mese: oggi.slice(0, 7), includi })
   const icona = (m) => (m.tipo === 'spesa' ? cat : fonti).find((x) => x.id === (m.categoriaId ?? m.fonteId))
 
@@ -114,6 +116,12 @@ export default function HomePage({ onModifica, vai, apri }) {
         <Delta nome="Saldo" cur={C.entrate - C.spese} prev={V.entrate - V.spese} buonoSeSale />
       </section>
 
+      {creditiAperti.length > 0 && (
+        <button className="ins info" style={{ width: '100%', textAlign: 'left', marginTop: 16 }} onClick={() => apri?.('crediti')}>
+          <span className="ic">💸</span>
+          <p><b>{euro(totCrediti)}</b> da incassare ({creditiAperti.length} {creditiAperti.length === 1 ? 'credito' : 'crediti'}). Tocca per vederli.</p>
+        </button>
+      )}
       <div className="sez-riga">
         <h2 className="sezione">Budget del mese</h2>
         <button className="link mini" onClick={() => apri?.('budget')}>{righeBudget.length ? 'Gestisci' : 'Imposta'}</button>

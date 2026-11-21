@@ -262,3 +262,15 @@ body{overscroll-behavior-y:contain}
 /* ---- aggiornamenti dell'app ---- */
 .aggiorna{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--soft);padding:calc(env(safe-area-inset-top) + 8px) 16px 8px;font-weight:600}
 .aggiorna .btn{padding:8px 16px;min-height:0}
+
+/* ---- persone, gruppi, crediti; niente zoom ---- */
+html{touch-action:pan-x pan-y}
+input,select,textarea{font-size:16px}
+.altro{display:grid;gap:12px;background:var(--soft);border-radius:16px;padding:12px 14px}
+.altro[open]>summary{margin-bottom:4px}
+.riga-sel{display:flex;gap:8px}
+.riga-sel select{flex:1;min-width:0}
+.piu{width:46px;flex:none;border-radius:12px;background:var(--card);font-size:1.2rem;font-weight:700;border:1.5px solid var(--line)}
+.cred{display:flex;align-items:center;gap:8px;padding-right:8px}
+.cred .riga{flex:1}
+.cred .btn{padding:8px 12px;min-height:0;font-size:.85rem}

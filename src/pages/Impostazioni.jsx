@@ -5,6 +5,7 @@ import GestioneVoci from './GestioneVoci'
 import SicurezzaPIN from '../components/SicurezzaPIN'
 import Installa from '../components/Installa'
 import Ricorrenze from './Ricorrenze'
+import Persone from './Persone'
 import { applicaTema } from '../lib'
 
 export default function Impostazioni({ apri }) {
@@ -14,6 +15,7 @@ export default function Impostazioni({ apri }) {
   const scegli = (t) => { setTema(t); applicaTema(t) }
   const fatto = (t) => { setMsg(t); setTimeout(() => setMsg(''), 2500) }
   if (vista === 'ricorrenze') return <Ricorrenze onIndietro={() => setVista(null)} />
+  if (vista === 'persone') return <Persone onIndietro={() => setVista(null)} />
   if (vista) return <GestioneVoci tipo={vista} onIndietro={() => setVista(null)} />
 
   return (
@@ -32,6 +34,7 @@ export default function Impostazioni({ apri }) {
         <button className="btn riga-btn" onClick={() => setVista('categorie')}>Categorie di spesa <ChevronRight size={18} /></button>
         <button className="btn riga-btn" onClick={() => setVista('fonti')}>Fonti di entrata <ChevronRight size={18} /></button>
         <button className="btn riga-btn" onClick={() => setVista('ricorrenze')}>Movimenti ricorrenti <ChevronRight size={18} /></button>
+        <button className="btn riga-btn" onClick={() => setVista('persone')}>Persone e gruppi <ChevronRight size={18} /></button>
         <button className="btn riga-btn" onClick={() => apri?.('budget')}>Budget e obiettivi <ChevronRight size={18} /></button>
       </section>
 

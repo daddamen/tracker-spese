@@ -28,6 +28,13 @@ db.version(3).stores({
   obiettivi: '++id'
 })
 
+db.version(4).stores({
+  movimenti: '++id, tipo, data, categoriaId, fonteId, albumId, stato, ricorrenzaId, rimborsoDi',
+  persone: '++id',
+  gruppi: '++id',
+  impostazioni: 'chiave'
+})
+
 db.on('populate', (tx) => {
   tx.table('categorie').bulkAdd([
     { nome: 'Cibo fuori', colore: '#f97316', icona: '🍔' },

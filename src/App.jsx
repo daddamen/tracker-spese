@@ -13,7 +13,10 @@ import { avviaAggiornamenti, installaAggiornamento, useAggiornamento } from './a
 import { sincronizza, avviaAutoSync, useSync } from './sync'
 import Impostazioni from './pages/Impostazioni'
 import MovimentoForm from './components/MovimentoForm'
-import { sincronizzaRicorrenze } from './db'
+import { db, sincronizzaRicorrenze } from './db'
+import { useLiveQuery } from 'dexie-react-hooks'
+import { DatiPersone } from './persone'
+import Crediti from './pages/Crediti'
 import { useOggi } from './lib'
 
 function Segnaposto({ icona: Icona, titolo, testo, passo }) {
@@ -61,6 +64,8 @@ export default function App() {
   }, [])
   const vaiTab = (t) => { setTab(t); setSub(null) }
   const sy = useSync()
+  const persone = useLiveQuery(() => db.persone.toArray(), []) ?? []
+  const gruppi = useLiveQuery(() => db.gruppi.toArray(), []) ?? []
   const ag = useAggiornamento()
   useEffect(() => { avviaAggiornamenti() }, [])
   useEffect(() => {
@@ -78,7 +83,7 @@ export default function App() {
   )
 
   return (
-    <>
+    <DatiPersone.Provider value={{ persone, gruppi }}>
     <div className="app" inert={bloccata ? '' : undefined}>
       <aside className="side">
         <div className="marchio"><Wallet size={22} /> Tracker Spese</div>
@@ -94,10 +99,10 @@ export default function App() {
           </div>
         )}
         <header className="top">
-          <div className="titolo"><h1>{sub === 'budget' ? 'Budget' : sub === 'backup' ? 'Backup' : sub === 'sync' ? 'Sincronizzazione' : corrente.nome}</h1>{sy.fase !== 'spento' && <button className="sync-btn" onClick={() => setSub('sync')} aria-label="Sincronizzazione">{{ ok: '☁️', sincronizzo: '🔄', offline: '📴', conflitto: '⚠️', errore: '⚠️' }[sy.fase]}</button>}</div>
+          <div className="titolo"><h1>{sub === 'budget' ? 'Budget' : sub === 'backup' ? 'Backup' : sub === 'sync' ? 'Sincronizzazione' : sub === 'crediti' ? 'Crediti' : corrente.nome}</h1>{sy.fase !== 'spento' && <button className="sync-btn" onClick={() => setSub('sync')} aria-label="Sincronizzazione">{{ ok: '☁️', sincronizzo: '🔄', offline: '📴', conflitto: '⚠️', errore: '⚠️' }[sy.fase]}</button>}</div>
           <button className="icona-btn solo-mobile" onClick={() => vaiTab('impostazioni')} aria-label="Impostazioni"><Settings size={22} /></button>
         </header>
-        <main className="main"><Suspense fallback={<p className="piccolo centro" style={{ padding: 40 }}>Carico…</p>}>{sub === 'budget' ? <Budget onIndietro={() => setSub(null)} /> : sub === 'backup' ? <Backup onIndietro={() => setSub(null)} /> : sub === 'sync' ? <Sincronizzazione onIndietro={() => setSub(null)} /> : corrente.el({ onModifica: setForm, vai: vaiTab, apri: setSub })}</Suspense></main>
+        <main className="main"><Suspense fallback={<p className="piccolo centro" style={{ padding: 40 }}>Carico…</p>}>{sub === 'budget' ? <Budget onIndietro={() => setSub(null)} /> : sub === 'backup' ? <Backup onIndietro={() => setSub(null)} /> : sub === 'sync' ? <Sincronizzazione onIndietro={() => setSub(null)} /> : sub === 'crediti' ? <Crediti onIndietro={() => setSub(null)} onModifica={setForm} /> : corrente.el({ onModifica: setForm, vai: vaiTab, apri: setSub })}</Suspense></main>
       </div>
 
       <nav className="tabbar">
@@ -110,6 +115,6 @@ export default function App() {
       {avviso && <div className="toast" role="status">{avviso}</div>}
     </div>
     {bloccata && <Blocco onSblocca={() => setBloccata(false)} />}
-    </>
+    </DatiPersone.Provider>
   )
 }

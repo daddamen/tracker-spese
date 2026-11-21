@@ -40,7 +40,7 @@ function hash(str) {
   h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909)
   return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36)
 }
-const impronta = async () => hash(canon((await creaBackup()).dati))
+const impronta = async () => hash(canon((await creaBackup(true)).dati))
 const conta = (d) => ({ movimenti: d?.movimenti?.length ?? 0, album: d?.album?.length ?? 0, budget: d?.budget?.length ?? 0, obiettivi: d?.obiettivi?.length ?? 0 })
 
 const tradotto = (e) => {
@@ -103,7 +103,7 @@ export async function sincronizza() {
     imposta({ fase: 'sincronizzo', messaggio: '' })
     const utente = session.user.id, st = leggi(K_ST, {})
     const base = st.utente === utente ? st.versioneBase ?? 0 : 0
-    const bk = await creaBackup(), locale = hash(canon(bk.dati))
+    const bk = await creaBackup(true), locale = hash(canon(bk.dati))
     const sporco = st.utente !== utente || locale !== st.impronta
     const remoto = await leggiRemoto(c, utente), rv = remoto?.versione ?? 0
     const vuoto = ['movimenti', 'album', 'budget', 'obiettivi', 'ricorrenze'].every((t) => (bk.dati[t] ?? []).length === 0)
@@ -121,7 +121,7 @@ export async function sincronizza() {
   } finally { inCorso = false }
 }
 
-const copiaSicurezza = (nome, dati) => scarica(JSON.stringify({ app: 'tracker-spese', versione: 1, esportatoIl: new Date().toISOString(), dati }), `tracker-spese-${nome}-${oggi()}.json`, 'application/json')
+const copiaSicurezza = (nome, dati) => scarica(JSON.stringify({ app: 'tracker-spese', versione: 1, esportatoIl: new Date().toISOString(), dati: Object.fromEntries(Object.entries(dati).filter(([k]) => k !== 'impostazioni')) }), `tracker-spese-${nome}-${oggi()}.json`, 'application/json')
 
 // scelta: 'unisci' | 'locale' | 'cloud' — in ogni caso scarico prima una copia di ciò che verrebbe sostituito
 export async function risolvi(scelta) {
@@ -133,7 +133,7 @@ export async function risolvi(scelta) {
     const { data: { session } } = await c.auth.getSession()
     const utente = session.user.id
     const remoto = await leggiRemoto(c, utente), rv = remoto?.versione ?? 0
-    const bk = await creaBackup()
+    const bk = await creaBackup(true)
     if (scelta === 'cloud') {
       if (!remoto) throw new Error('Il cloud è vuoto.')
       copiaSicurezza('prima-della-sincronizzazione', bk.dati)

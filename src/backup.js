@@ -1,12 +1,13 @@
 import { db } from './db'
 import { isoData, parseEuro } from './lib'
 
-const TABELLE = ['movimenti', 'categorie', 'fonti', 'album', 'ricorrenze', 'budget', 'obiettivi']
+const TABELLE = ['movimenti', 'categorie', 'fonti', 'album', 'ricorrenze', 'budget', 'obiettivi', 'persone', 'gruppi']
 const VERSIONE = 1
 
-export async function creaBackup() {
+export async function creaBackup(conImpostazioni = false) {
   const dati = {}
   for (const t of TABELLE) dati[t] = await db[t].toArray()
+  if (conImpostazioni) dati.impostazioni = await db.impostazioni.toArray()
   return { app: 'tracker-spese', versione: VERSIONE, esportatoIl: new Date().toISOString(), dati }
 }
 
@@ -30,8 +31,9 @@ export function leggiBackup(testo) {
 
 // Sostituisce TUTTI i dati con quelli del backup (in un'unica transazione: o tutto o niente)
 export async function ripristina(b) {
-  await db.transaction('rw', TABELLE.map((t) => db[t]), async () => {
-    for (const t of TABELLE) {
+  const tab = b.dati.impostazioni !== undefined ? [...TABELLE, 'impostazioni'] : TABELLE
+  await db.transaction('rw', tab.map((t) => db[t]), async () => {
+    for (const t of tab) {
       await db[t].clear()
       if (b.dati[t]?.length) await db[t].bulkAdd(b.dati[t])
     }

@@ -4,9 +4,10 @@ import { Search, SlidersHorizontal } from 'lucide-react'
 import { db } from '../db'
 import Riga from '../components/Riga'
 import Calendario from '../components/Calendario'
+import { usePersone } from '../persone'
 import { euro, parseEuro, etichettaGiorno, ordinaCategorie, usePref } from '../lib'
 
-const VUOTI = { tipo: 'tutti', voce: '', da: '', a: '', min: '', max: '' }
+const VUOTI = { tipo: 'tutti', voce: '', gruppo: '', da: '', a: '', min: '', max: '' }
 
 function Lista({ onModifica }) {
   const mov = useLiveQuery(() => db.movimenti.toArray(), []) ?? []
@@ -16,6 +17,7 @@ function Lista({ onModifica }) {
   const [aperti, setAperti] = useState(false)
   const [f, setF] = useState(VUOTI)
   const [limite, setLimite] = useState(100)
+  const { gruppi } = usePersone()
   const [includi, setIncludi] = usePref('includiPrevisti', false)
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value })
   const attivi = Object.keys(VUOTI).filter((k) => f[k] !== VUOTI[k]).length
@@ -30,6 +32,7 @@ function Lista({ onModifica }) {
         const id = +f.voce.slice(1), c = cat.find((x) => x.id === m.categoriaId)
         if (!(f.voce[0] === 'c' ? m.categoriaId === id || c?.parentId === id : m.fonteId === id)) return false
       }
+      if (f.gruppo && String(m.gruppoId ?? '') !== f.gruppo) return false
       if (f.da && m.data < f.da) return false
       if (f.a && m.data > f.a) return false
       if (min && m.importo < min) return false
@@ -71,6 +74,11 @@ function Lista({ onModifica }) {
               <optgroup label="Fonti di entrata">{fonti.map((x) => <option key={x.id} value={'f' + x.id}>{x.icona} {x.nome}</option>)}</optgroup>
             </select>
           </label>
+          {gruppi.length > 0 && (
+            <label className="campo">Gruppo
+              <select value={f.gruppo} onChange={set('gruppo')}><option value="">Tutti</option>{gruppi.map((g) => <option key={g.id} value={g.id}>👥 {g.nome}</option>)}</select>
+            </label>
+          )}
           <div className="griglia2">
             <label className="campo">Dal<input type="date" value={f.da} onChange={set('da')} /></label>
             <label className="campo">Al<input type="date" value={f.a} onChange={set('a')} /></label>

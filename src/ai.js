@@ -1,4 +1,5 @@
 import { statoBudget } from './budget'
+import { db } from './db'
 
 export const MODELLI = [['claude-haiku-5-5', 'Haiku 5.5 · veloce ed economico'], ['claude-sonnet-5-5', 'Sonnet 5.5 · più approfondito']]
 export const CHIAVI = { gemini: 'chiaveGemini', claude: 'chiaveClaude' }
@@ -115,3 +116,6 @@ export async function chiediGemini({ chiave, modello, sistema: sys, messaggi }) 
 }
 
 export const chiedi = (provider, args) => (provider === 'gemini' ? chiediGemini(args) : chiediClaude(args))
+
+// chiavi e modelli: salvati nel database, quindi si sincronizzano con gli altri dispositivi (mai nei file di backup)
+export const salvaImpostazione = (chiave, valore) => (valore ? db.impostazioni.put({ chiave, valore }) : db.impostazioni.delete(chiave))

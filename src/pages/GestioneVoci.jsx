@@ -47,7 +47,7 @@ function VoceForm({ tipo, voce, voci, onClose }) {
   const [conferma, setConferma] = useState(false)
   const [dest, setDest] = useState('')
   const usati = useLiveQuery(() => (modifica ? db.movimenti.where(campo).equals(voce.id).count() : 0), [voce.id]) ?? 0
-  const figli = voci.filter((v) => v.parentId === voce.id).length
+  const figli = modifica ? voci.filter((v) => v.parentId === voce.id).length : 0
   const altre = voci.filter((v) => v.id !== voce.id)
   const principali = altre.filter((v) => !v.parentId)
 
