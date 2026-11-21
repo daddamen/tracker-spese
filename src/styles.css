@@ -1,0 +1,264 @@
+:root{--bg:#f3f4f1;--card:#fff;--txt:#14231f;--mute:#5f6e69;--line:#e1e5e0;--acc:#0f5c52;--acc-t:#fff;--ok:#15803d;--ko:#c2410c;--soft:#e8efec;
+  --sh:0 1px 2px rgba(20,35,31,.06),0 6px 20px rgba(20,35,31,.05);color-scheme:light}
+:root[data-tema=scuro]{--bg:#0e1513;--card:#17211e;--txt:#eaf1ee;--mute:#93a39d;--line:#27332f;--acc:#2fb39c;--acc-t:#06231e;--ok:#4ade80;--ko:#fb923c;--soft:#1f2b27;
+  --sh:none;color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{background:var(--bg);color:var(--txt);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-variant-numeric:tabular-nums}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+h1,h2,p{margin:0}
+
+.app{min-height:100dvh;display:grid;grid-template-columns:1fr}
+.colonna{min-width:0}
+.top{display:flex;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top) + 18px) 20px 6px}
+.top h1{font-size:1.7rem;letter-spacing:-.02em}
+.main{padding:8px 16px calc(110px + env(safe-area-inset-bottom));max-width:720px;margin:0 auto}
+.icona-btn{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--card);box-shadow:var(--sh)}
+
+/* barra inferiore (mobile) */
+.tabbar{position:fixed;inset:auto 0 0 0;display:grid;grid-template-columns:1fr 1fr 84px 1fr 1fr;align-items:center;
+  background:var(--card);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
+.voce{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;font-size:.72rem;color:var(--mute);border-radius:14px;min-height:52px;justify-content:center}
+.voce.attiva{color:var(--acc);font-weight:700}
+.fab{justify-self:center;width:64px;height:64px;border-radius:50%;margin-top:-34px;background:var(--acc);color:var(--acc-t);display:grid;place-items:center;
+  box-shadow:0 8px 20px rgba(15,92,82,.35);border:5px solid var(--bg)}
+.side{display:none}
+
+/* home */
+.data{color:var(--mute);text-transform:capitalize;margin:4px 4px 12px}
+.saldo{background:var(--acc);color:var(--acc-t);border-radius:24px;padding:22px}
+.saldo>span{opacity:.8;font-size:.95rem}
+.saldo strong{display:block;font-size:2.5rem;letter-spacing:-.03em;line-height:1.15;margin:2px 0 18px}
+.saldo-riga{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.saldo-riga div{background:rgba(255,255,255,.14);border-radius:16px;padding:10px 12px;display:grid;grid-template-columns:auto 1fr;column-gap:6px;align-items:center}
+.saldo-riga b{grid-column:1/-1;font-size:1.1rem;margin-top:2px}
+.saldo-riga span{font-size:.85rem;opacity:.85}
+.sezione{font-size:1.1rem;margin:26px 4px 10px}
+.lista{list-style:none;margin:0;padding:6px;background:var(--card);border-radius:20px;box-shadow:var(--sh)}
+.lista li{display:flex;align-items:center;gap:12px;padding:10px;border-radius:14px}
+.lista li+li{border-top:1px solid var(--line)}
+.pallino{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font-size:1.3rem;flex:none}
+.testo{flex:1;min-width:0;display:grid}
+.testo b{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.testo small,.piccolo{color:var(--mute);font-size:.85rem}
+.importo{font-weight:700}.importo.spesa{color:var(--ko)}.importo.entrata{color:var(--ok)}
+
+/* vuoti, schede, bottoni */
+.vuoto{background:var(--card);border:1.5px dashed var(--line);border-radius:20px;padding:26px 20px;text-align:center;display:grid;gap:6px;justify-items:center;color:var(--mute)}
+.vuoto.grande{margin-top:16px;padding:48px 20px;gap:10px}
+.vuoto.grande h2{color:var(--txt)}
+.chip{background:var(--soft);color:var(--acc);padding:4px 12px;border-radius:99px;font-size:.85rem;font-weight:600}
+.scheda{background:var(--card);border-radius:20px;padding:18px;margin-bottom:14px;box-shadow:var(--sh);display:grid;gap:12px}
+.scheda h2{font-size:1.05rem}
+.segmenti{display:grid;grid-template-columns:repeat(3,1fr);background:var(--soft);border-radius:14px;padding:4px}
+.segmenti button{padding:10px;border-radius:11px;font-weight:600;color:var(--mute)}
+.segmenti .attiva{background:var(--card);color:var(--txt);box-shadow:var(--sh)}
+.azioni{display:grid;gap:10px}
+.btn{padding:14px 16px;border-radius:14px;background:var(--soft);font-weight:600;min-height:48px}
+.btn.pericolo{color:var(--ko)}
+.ok{color:var(--ok);font-weight:600}.centro{text-align:center;margin-top:20px}
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--txt);color:var(--bg);
+  padding:12px 18px;border-radius:14px;font-size:.92rem;max-width:90vw;text-align:center}
+
+/* desktop */
+@media (min-width:900px){
+  .app{grid-template-columns:260px 1fr}
+  .tabbar,.solo-mobile,.toast{display:none}
+  .toast{display:block}
+  .side{display:flex;flex-direction:column;gap:20px;padding:28px 18px;position:sticky;top:0;height:100dvh;background:var(--card);border-right:1px solid var(--line)}
+  .marchio{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.15rem;color:var(--acc)}
+  .nuovo-grande{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--acc);color:var(--acc-t);padding:14px;border-radius:14px;font-weight:700}
+  .side nav{display:grid;gap:4px}
+  .side .voce{flex-direction:row;gap:12px;font-size:1rem;padding:12px 14px;justify-content:flex-start;min-height:0}
+  .side .voce.attiva{background:var(--soft)}
+  .main{padding:8px 28px 40px}.top{padding:28px 28px 6px}
+}
+@media (min-width:900px){.toast{bottom:28px}}
+@media (prefers-reduced-motion:no-preference){.fab,.btn,.voce{transition:transform .12s}.fab:active,.btn:active{transform:scale(.96)}}
+
+/* ---- Passo 2: righe, ricerca, filtri, form ---- */
+.lista li{display:block;padding:0}
+.riga{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:10px;border-radius:14px}
+.riga:hover{background:var(--soft)}
+.barra{display:flex;gap:10px;margin:6px 0 12px}
+.cerca{display:flex;align-items:center;gap:10px;flex:1;min-width:0;background:var(--card);border-radius:16px;padding:0 14px;box-shadow:var(--sh);color:var(--mute)}
+.cerca input{flex:1;min-width:0;border:0;background:none;font:inherit;color:var(--txt);padding:14px 0;outline:0}
+.filtro-btn{position:relative;width:52px;border-radius:16px;background:var(--card);box-shadow:var(--sh);display:grid;place-items:center}
+.filtro-btn.attiva{background:var(--acc);color:var(--acc-t)}
+.badge{position:absolute;top:-5px;right:-5px;background:var(--ko);color:#fff;font-size:.72rem;font-weight:700;min-width:20px;height:20px;border-radius:10px;display:grid;place-items:center}
+.griglia2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.campo{display:grid;gap:6px;font-size:.88rem;color:var(--mute);font-weight:600}
+.campo input,.campo select{font:inherit;font-weight:400;color:var(--txt);background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:12px;min-width:0;width:100%}
+.campo input:focus,.campo select:focus{outline:0;border-color:var(--acc)}
+.riepilogo{display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px 12px;color:var(--mute);font-size:.88rem;margin:4px 4px 0}
+.giorno{font-size:.9rem;color:var(--mute);margin:18px 4px 8px;font-weight:600;text-transform:capitalize}
+.link{color:var(--acc);font-weight:600;padding:8px;justify-self:center}
+.link.pericolo{color:var(--ko)}
+.segmenti.due{grid-template-columns:1fr 1fr}
+.btn.primario{background:var(--acc);color:var(--acc-t)}
+.errore{color:var(--ko);font-weight:600}
+
+.velo{position:fixed;inset:0;z-index:20;background:rgba(10,20,17,.5);display:flex;align-items:flex-end;justify-content:center}
+.foglio{background:var(--card);width:100%;max-width:520px;max-height:94dvh;overflow:auto;border-radius:26px 26px 0 0;
+  padding:18px 18px calc(18px + env(safe-area-inset-bottom));display:grid;gap:16px}
+.foglio-testa{display:flex;justify-content:space-between;align-items:center}
+.importo-in{display:flex;align-items:center;justify-content:center;gap:4px;font-size:2.8rem;font-weight:800;letter-spacing:-.02em}
+.importo-in input{font:inherit;border:0;background:none;color:inherit;width:7ch;min-width:0;outline:0;text-align:right}
+.importo-in input::placeholder{color:var(--line)}
+.scelte{display:flex;flex-wrap:wrap;gap:8px}
+.scelta{display:flex;align-items:center;gap:6px;padding:9px 14px;border-radius:99px;background:var(--soft);font-weight:600;color:var(--txt);border:2px solid transparent}
+.scelta[aria-pressed=true]{border-color:var(--acc);background:var(--card)}
+@media (min-width:900px){.velo{align-items:center}.foglio{border-radius:26px}}
+@media (prefers-reduced-motion:no-preference){.foglio{animation:su .22s ease-out}@keyframes su{from{transform:translateY(40px);opacity:0}}}
+
+/* ---- Passo 3: gestione categorie e fonti ---- */
+.indietro{display:flex;align-items:center;gap:2px;margin:0 0 0 -8px}
+.btn.largo{width:100%;display:flex;align-items:center;justify-content:center;gap:8px}
+.riga-btn{display:flex;justify-content:space-between;align-items:center;text-align:left}
+.lista li.sub .riga{padding-left:34px}
+.lista li.sub .pallino{width:38px;height:38px;font-size:1.1rem}
+.anteprima{display:flex;align-items:center;gap:12px}
+.anteprima input{flex:1;min-width:0;font:inherit;font-size:1.15rem;font-weight:600;color:var(--txt);background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:12px}
+.anteprima input:focus{outline:0;border-color:var(--acc)}
+.emo{width:44px;height:44px;border-radius:12px;background:var(--soft);font-size:1.3rem;display:grid;place-items:center;border:2px solid transparent}
+.emo[aria-pressed=true]{border-color:var(--acc);background:var(--card)}
+.colore{width:36px;height:36px;border-radius:50%;border:0}
+.colore[aria-pressed=true]{box-shadow:0 0 0 2px var(--card),0 0 0 5px var(--txt)}
+.sotto-scelte{margin-top:6px;padding-left:12px;border-left:3px solid var(--line)}
+.campo small{font-weight:400}
+
+/* ---- Passo 4: album ---- */
+.album-card{display:grid;gap:12px;width:100%;text-align:left;background:var(--card);border-radius:20px;padding:16px;box-shadow:var(--sh);margin-bottom:12px}
+.album-riga{display:flex;align-items:center;gap:12px}
+.barra-bud{height:8px;border-radius:99px;background:var(--soft);overflow:hidden;margin-bottom:6px}
+.barra-bud i{display:block;height:100%;background:var(--acc);border-radius:99px}
+.barra-bud i.sfora{background:var(--ko)}
+.bud-testo{display:flex;justify-content:space-between;gap:8px;font-size:.85rem;color:var(--mute)}
+.saldo .barra-bud{background:rgba(255,255,255,.22)}
+.saldo .barra-bud i{background:#fff}
+.saldo .barra-bud i.sfora{background:#fdba74}
+.saldo .bud-testo{color:rgba(255,255,255,.85)}
+.saldo strong:last-child{margin-bottom:0}
+.testata-album{display:flex;align-items:center;gap:12px;margin-top:4px}
+.testata-album h2{font-size:1.4rem;letter-spacing:-.02em}
+.donut{position:relative}
+.donut-centro{position:absolute;inset:0;display:grid;place-content:center;text-align:center;pointer-events:none}
+.donut-centro small{color:var(--mute)}
+.donut-centro b{font-size:1.25rem}
+.leg{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.leg li{display:flex;align-items:center;gap:10px}
+.leg .punto{width:12px;height:12px;border-radius:50%;flex:none}
+.leg .nome{flex:1;min-width:0}
+
+/* ---- Passo 5: calendario, previste, ricorrenze ---- */
+.badge-prev{font-style:normal;font-size:.7rem;font-weight:700;margin-left:8px;padding:2px 8px;border-radius:99px;background:var(--soft);color:var(--acc);vertical-align:2px}
+.riga.prevista .pallino{border:1.5px dashed var(--mute)}
+.riga.prevista .importo{opacity:.7}
+.link.mini{font-size:.85rem;padding:0}
+.interruttore{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--soft);border-radius:14px;padding:12px 14px;cursor:pointer}
+.interruttore span{display:grid;gap:2px}
+.interruttore small{color:var(--mute);font-size:.82rem}
+.interruttore input{appearance:none;-webkit-appearance:none;flex:none;width:50px;height:30px;border-radius:99px;background:var(--line);position:relative;cursor:pointer;transition:background .15s}
+.interruttore input::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:transform .15s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.interruttore input:checked{background:var(--acc)}
+.interruttore input:checked::after{transform:translateX(20px)}
+.cal-testa{display:flex;align-items:center;justify-content:space-between;margin:2px 0 10px}
+.cal-testa h3{text-transform:capitalize;font-size:1.15rem}
+.cal-griglia{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-sett{text-align:center;font-size:.75rem;color:var(--mute);font-weight:600;padding:4px 0}
+.cella{aspect-ratio:1/1.05;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-weight:600;background:var(--card)}
+.cella.vuota{background:none;pointer-events:none}
+.cella.oggi{box-shadow:inset 0 0 0 2px var(--acc)}
+.cella.sel{background:var(--acc);color:var(--acc-t)}
+.punti{display:flex;gap:3px;height:6px}
+.punti i{width:6px;height:6px;border-radius:50%;box-sizing:border-box}
+.punti .s{background:var(--ko)}.punti .e{background:var(--ok)}
+.punti .p{border:1.5px solid var(--mute)}
+.cella.sel .punti .s{background:#fdba74}.cella.sel .punti .e{background:#fff}.cella.sel .punti .p{border-color:var(--acc-t)}
+.legenda{margin:2px 4px 0}
+
+/* ---- Passo 6: dashboard ---- */
+.conf-riga{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.conf-riga+.conf-riga{border-top:1px solid var(--line);padding-top:12px}
+.conf-riga b{font-size:1.1rem}
+.delta{display:flex;align-items:center;gap:4px;font-weight:600;font-size:.88rem;color:var(--mute);text-align:right}
+.delta.ok{color:var(--ok)}.delta.ko{color:var(--ko)}
+.sez-riga{display:flex;justify-content:space-between;align-items:flex-end}
+.sez-riga .link{margin-bottom:10px}
+
+/* ---- Passo 7: grafici ---- */
+.segmenti.quattro{grid-template-columns:repeat(4,1fr)}
+.mini-seg{margin-bottom:10px;min-width:150px}
+.mini-seg button{padding:6px 10px;font-size:.85rem}
+
+/* ---- Passo 8: confronti ---- */
+.pt{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+
+/* ---- Passo 9: insight ---- */
+.ins{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:16px;background:var(--soft);border-left:4px solid var(--acc)}
+.ins.bene{border-left-color:var(--ok)}.ins.male{border-left-color:var(--ko)}
+.ins .ic{font-size:1.4rem;line-height:1.3}
+.ins p{margin:0}
+
+/* ---- Passo 10: budget e obiettivi ---- */
+.bud-riga{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:6px 0}
+.scheda .bud-riga+.bud-riga{border-top:1px solid var(--line);padding-top:14px}
+.bud-riga .testo{gap:6px}
+.bud-riga .barra-bud{margin:0}
+.bud-pct{font-weight:800;min-width:48px;text-align:right}
+.bud-pct.ok{color:var(--ok)}.bud-pct.att{color:#d97706}.bud-pct.ko{color:var(--ko)}
+.barra-bud i.att{background:#f59e0b}.barra-bud i.ko{background:var(--ko)}.barra-bud i.ok{background:var(--ok)}
+
+/* ---- Passo 11: backup e valute ---- */
+.cifra{display:grid;justify-items:end}
+.cifra small{color:var(--mute);font-size:.78rem}
+.valuta-riga{display:grid;gap:6px}
+.btn.file{display:block;text-align:center;cursor:pointer}
+.btn:disabled{opacity:.5}
+
+/* ---- Passo 12: consigli AI ---- */
+.chat{display:grid;gap:10px;margin:14px 0 6px}
+.msg{padding:12px 14px;border-radius:18px;max-width:92%}
+.msg.user{justify-self:end;background:var(--acc);color:var(--acc-t);border-bottom-right-radius:6px}
+.msg.assistant{justify-self:start;background:var(--card);box-shadow:var(--sh);border-bottom-left-radius:6px}
+.msg p{margin:0 0 8px}.msg p:last-child{margin:0}
+.msg ul{margin:0 0 8px;padding-left:20px}.msg li{margin:4px 0}
+.chat-input{display:flex;gap:8px}
+.chat-input input{flex:1;min-width:0;font:inherit;color:var(--txt);background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;box-shadow:var(--sh)}
+.chat-input input:focus{outline:0;border-color:var(--acc)}
+.chat-input .btn{width:52px;display:grid;place-items:center;padding:0}
+.codice{font-size:.74rem;max-height:240px;overflow:auto;background:var(--bg);border-radius:12px;padding:10px;white-space:pre-wrap;word-break:break-word;margin:0}
+details summary{cursor:pointer;font-weight:600;padding:4px 0}
+.passi{margin:0;padding-left:20px;display:grid;gap:6px;color:var(--mute)}
+.scelta:disabled{opacity:.5}
+
+/* ---- Passo 13: sincronizzazione ---- */
+.titolo{display:flex;align-items:center;gap:10px}
+.sync-btn{width:36px;height:36px;border-radius:50%;background:var(--card);box-shadow:var(--sh);font-size:1.05rem}
+.passi code{background:var(--soft);padding:1px 6px;border-radius:6px}
+
+/* ---- Passo 14: rifinitura, PIN ---- */
+html{-webkit-text-size-adjust:100%}
+button,.cella,.voce,.fab,.tasto{touch-action:manipulation}
+body{overscroll-behavior-y:contain}
+.foglio{overscroll-behavior:contain}
+.blocco{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
+  padding:calc(env(safe-area-inset-top) + 24px) 24px calc(env(safe-area-inset-bottom) + 24px);overflow:auto}
+.tastierino{display:grid;justify-items:center;gap:14px}
+.tastierino h2{margin:0}
+.pin-punti{display:flex;gap:14px;height:18px;align-items:center}
+.pin-punti i{width:16px;height:16px;border-radius:50%;border:2px solid var(--mute);box-sizing:border-box}
+.pin-punti i.pieno{background:var(--acc);border-color:var(--acc)}
+.tastiera{display:grid;grid-template-columns:repeat(3,76px);gap:14px}
+.tasto{height:76px;border-radius:50%;background:var(--card);box-shadow:var(--sh);font-size:1.6rem;font-weight:600;display:grid;place-items:center}
+.tasto:active{background:var(--soft)}
+.tasto-vuoto{background:none;box-shadow:none;pointer-events:none}
+@media (prefers-reduced-motion:no-preference){
+  .pin-punti.scossa{animation:scuoti .35s}
+  @keyframes scuoti{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+}
+
+/* ---- aggiornamenti dell'app ---- */
+.aggiorna{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--soft);padding:calc(env(safe-area-inset-top) + 8px) 16px 8px;font-weight:600}
+.aggiorna .btn{padding:8px 16px;min-height:0}
