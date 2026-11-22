@@ -17,7 +17,7 @@ function Lista({ onModifica }) {
   const [aperti, setAperti] = useState(false)
   const [f, setF] = useState(VUOTI)
   const [limite, setLimite] = useState(100)
-  const { gruppi } = usePersone()
+  const { gruppi: gruppiP } = usePersone()
   const [includi, setIncludi] = usePref('includiPrevisti', false)
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value })
   const attivi = Object.keys(VUOTI).filter((k) => f[k] !== VUOTI[k]).length
@@ -74,9 +74,9 @@ function Lista({ onModifica }) {
               <optgroup label="Fonti di entrata">{fonti.map((x) => <option key={x.id} value={'f' + x.id}>{x.icona} {x.nome}</option>)}</optgroup>
             </select>
           </label>
-          {gruppi.length > 0 && (
+          {gruppiP.length > 0 && (
             <label className="campo">Gruppo
-              <select value={f.gruppo} onChange={set('gruppo')}><option value="">Tutti</option>{gruppi.map((g) => <option key={g.id} value={g.id}>👥 {g.nome}</option>)}</select>
+              <select value={f.gruppo} onChange={set('gruppo')}><option value="">Tutti</option>{gruppiP.map((g) => <option key={g.id} value={g.id}>👥 {g.nome}</option>)}</select>
             </label>
           )}
           <div className="griglia2">
