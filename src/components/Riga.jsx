@@ -8,7 +8,7 @@ export default function Riga({ m, voce, sotto, onClick }) {
   const tag = [
     m.credito && (m.saldato ? `✅ restituito il ${dataBreve(m.dataSaldo)}` : `💸 credito${nomeP(m.debitore) ? ' · ' + nomeP(m.debitore) : ''}`),
     m.pagataDa && `pagata da ${nomeP(m.pagataDa) ?? 'altri'}`,
-    m.gruppoId && `👥 ${gruppi.find((g) => g.id === m.gruppoId)?.nome ?? ''}`
+    m.gruppoId && (() => { const g = gruppi.find((x) => x.id === m.gruppoId); return `${g?.icona ?? '👥'} ${g?.nome ?? ''}` })()
   ].filter(Boolean)
   return (
     <li>

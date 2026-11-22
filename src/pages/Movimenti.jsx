@@ -76,7 +76,7 @@ function Lista({ onModifica }) {
           </label>
           {gruppiP.length > 0 && (
             <label className="campo">Gruppo
-              <select value={f.gruppo} onChange={set('gruppo')}><option value="">Tutti</option>{gruppiP.map((g) => <option key={g.id} value={g.id}>👥 {g.nome}</option>)}</select>
+              <select value={f.gruppo} onChange={set('gruppo')}><option value="">Tutti</option>{gruppiP.map((g) => <option key={g.id} value={g.id}>{g.icona ?? '👥'} {g.nome}</option>)}</select>
             </label>
           )}
           <div className="griglia2">
